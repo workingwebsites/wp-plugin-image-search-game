@@ -1,0 +1,10 @@
+@charset "utf-8";
+/* CSS Document */
+#alf_meta_box label{
+	vertical-align:top;	
+}
+
+#alf_meta_box textarea{
+	width: 30em;	
+}
+
