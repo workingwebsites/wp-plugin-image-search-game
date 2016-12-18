@@ -1,9 +1,9 @@
 @charset "utf-8";
 /* CSS Document */
-#isg_meta_box label{
+#ihns_meta_box label{
 	vertical-align:top;
 }
 
-#isg_meta_box textarea{
+#ihns_meta_box textarea{
 	width: 30em;
 }

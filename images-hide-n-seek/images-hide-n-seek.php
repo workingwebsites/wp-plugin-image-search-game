@@ -1,10 +1,10 @@
 <?php
 /**
- * @package Image Search Game
+ * @package Images Hide n' Seek
  * @version 1.0
  */
 /*
-Plugin Name: Image Search Game
+Plugin Name: Images Hide n' Seek
 Plugin URI: http://workingwebsites.ca/
 Description: Customized plugin for website
 Author: Working Websites (Lisa Armstrong)
@@ -13,33 +13,33 @@ Author URI: http://workingwebsites.ca
 */
 
 //===== LOAD ADMIN STYLE SHEET =====//
-function isg_admin_style() {
-  wp_enqueue_style('admin-styles', plugins_url( 'stylesheet/Admin.css', __FILE__  ));
+function ihns_admin_style() {
+  wp_enqueue_style('admin-styles', plugins_url( 'stylesheet/hns_Admin.css', __FILE__  ));
 }
-add_action('admin_enqueue_scripts', 'isg_admin_style');
+add_action('admin_enqueue_scripts', 'ihns_admin_style');
 
 //===== CREATE POST TYPE =====//
-function isg_custom_post_type() {
+function ihns_custom_post_type() {
 // Set UI labels for Custom Post Type
 	$labels = array(
-		'name'                => _x( 'Search Image', Find', 'Post Type General Name'),
-		'singular_name'       => _x( 'Search Image', 'Post Type Singular Name'),
-		'menu_name'           => __( 'Search Image'),
-		'parent_item_colon'   => __( 'Parent Search Image'),
-		'all_items'           => __( 'All Search Image' ),
-		'view_item'           => __( 'View Search Image'),
-		'add_new_item'        => __( 'Add New Search Image'),
+		'name'                => _x( 'Hide and Seek', 'Find', 'Post Type General Name'),
+		'singular_name'       => _x( 'Hide and Seek Image', 'Post Type Singular Name'),
+		'menu_name'           => __( 'Hide and Seek Image'),
+		'parent_item_colon'   => __( 'Parent Hide and Seek'),
+		'all_items'           => __( 'All Hide and Seek' ),
+		'view_item'           => __( 'View Hide and Seek'),
+		'add_new_item'        => __( 'Add New Hide and Seek'),
 		'add_new'             => __( 'Add New'),
-		'edit_item'           => __( 'Edit Search Image'),
-		'update_item'         => __( 'Update Search Image'),
-		'search_items'        => __( 'Search Search Image'),
+		'edit_item'           => __( 'Edit Hide and Seek'),
+		'update_item'         => __( 'Update Hide and Seek'),
+		'search_items'        => __( 'Search Hide and Seek'),
 		'not_found'           => __( 'Not Found'),
 		'not_found_in_trash'  => __( 'Not found in Trash'),
 	);
 
 // Set other options for Custom Post Type
 	$args = array(
-		'label'               => __( 'sea_find'),
+		'label'               => __( 'hiden_n_seek_image'),
 		'description'         => __( 'Search for items in image.'),
 		'labels'              => $labels,
 		'supports'            => array( 'title',
@@ -62,21 +62,21 @@ function isg_custom_post_type() {
 	);
 
 	// Registering your Custom Post Type
-	register_post_type( 'seafind', $args );
+	register_post_type( 'hidenseek', $args );
 }
 
 
-//Enable seafind to be archived and categorized
-function isg_add_custom_types_to_tax( $query ) {
+//Enable hidenseek to be archived and categorized
+function ihns_add_custom_types_to_tax( $query ) {
 	if( is_category() || is_tag() && empty( $query->query_vars['suppress_filters'] ) ) {
 		// Get all your post types
-		$post_types = array( 'post', 'seafind' );
+		$post_types = array( 'post', 'hidenseek' );
 
 		$query->set( 'post_type', $post_types );
 		return $query;
 	}
 }
-add_filter( 'pre_get_posts', 'isg_add_custom_types_to_tax' );
+add_filter( 'pre_get_posts', 'ihns_add_custom_types_to_tax' );
 
 
 /* Hook into the 'init' action so that the function
@@ -84,13 +84,12 @@ add_filter( 'pre_get_posts', 'isg_add_custom_types_to_tax' );
 * unnecessarily executed.
 */
 
-add_action( 'init', 'isg_custom_post_type', 0 );
+add_action( 'init', 'ihns_custom_post_type', 0 );
 
 
 //===== ADD META BOX =====//
 
-function isg_meta_box_fields(){
-    // $post is already set, and contains an object: the WordPress post
+function ihns_meta_box_fields(){
     global $post;
 
 	//Set boxes
@@ -99,8 +98,7 @@ function isg_meta_box_fields(){
 	$Hint3 = get_post_meta ($post->ID, 'hint3_text', true);
 	$Hint4 = get_post_meta ($post->ID, 'hint4_text', true);
 
-    // We'll use this nonce field later on when saving.
-    wp_nonce_field( 'my_meta_box_nonce', 'meta_box_nonce' );
+    wp_nonce_field( 'ihns_meta_box_nonce', 'meta_box_nonce' );
 
 	//Display boxes
 	?>
@@ -127,22 +125,22 @@ function isg_meta_box_fields(){
     <?php
 }
 
-function isg_meta_box_add(){
-	add_meta_box( 'isg_meta_box', 'Search Image Hints', 'isg_meta_box_fields', 'seafind', 'normal', 'high' );
+function ihns_meta_box_add(){
+	add_meta_box( 'ihns_meta_box', 'Search Image Hints', 'ihns_meta_box_fields', 'hidenseek', 'normal', 'high' );
 }
 
-add_action( 'add_meta_boxes', 'isg_meta_box_add' );
+add_action( 'add_meta_boxes', 'ihns_meta_box_add' );
 
 
 //--- SAVE DATA ---//
-function isg_meta_box_save( $post_id ){
+function ihns_meta_box_save( $post_id ){
 
 	// OK TO SAVE DATA?
 	// Bail if we're doing an auto save
     if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
     // if our nonce isn't there, or we can't verify it, bail
-    if(!isset( $_POST['meta_box_nonce']) || !wp_verify_nonce($_POST['meta_box_nonce'], 'my_meta_box_nonce')){
+    if(!isset( $_POST['meta_box_nonce']) || !wp_verify_nonce($_POST['meta_box_nonce'], 'ihns_meta_box_nonce')){
 		 return;
 	}
 
@@ -172,12 +170,12 @@ function isg_meta_box_save( $post_id ){
 
 }
 
-add_action( 'save_post', 'isg_meta_box_save' );
+add_action( 'save_post', 'ihns_meta_box_save' );
 
 
 //===== DISPLAY =====//
 //Functions that will display the results
-function isg_ObjPost(){
+function ihns_ObjPost(){
 //Returns Page objecta based on URL
 	$post_id = get_page_by_path($_SERVER['REQUEST_URI']);
 	$post_object = get_post( $post_id );
@@ -189,17 +187,17 @@ function isg_ObjPost(){
 /**
  * Enqueue a script with jQuery as a dependency.
  */
-function isg_scripts_method() {
+function ihns_scripts_method() {
 //Loads script
-	if(get_post_type() == 'seafind'){
+	if(get_post_type() == 'hidenseek'){
     	//For page
-		wp_enqueue_style('seafind.css', plugins_url('stylesheet/SeaFind.css', __FILE__));
-		wp_enqueue_script('isg_SeaFind.js', plugins_url('javascript/isg_SeaFind.js', __FILE__), array('jquery'));
+		wp_enqueue_style('HideNSeek.css', plugins_url('stylesheet/HideNSeek.css', __FILE__));
+		wp_enqueue_script('HideNSeek.js', plugins_url('javascript/HideNSeek.js', __FILE__), array('jquery'));
 
 		//For ImageViewer
 		wp_enqueue_style('imageviewer.css', plugins_url('javascript/ImageViewer-master/imageviewer.css', __FILE__));
 		wp_enqueue_script('imageviewer.js', plugins_url('javascript/ImageViewer-master/imageviewer.js', __FILE__), array('jquery'));
 	}
 }
-add_action( 'wp_enqueue_scripts', 'isg_scripts_method' );
+add_action( 'wp_enqueue_scripts', 'ihns_scripts_method' );
 ?>
