@@ -22,17 +22,17 @@ add_action('admin_enqueue_scripts', 'isg_admin_style');
 function isg_custom_post_type() {
 // Set UI labels for Custom Post Type
 	$labels = array(
-		'name'                => _x( 'Sea Find', 'Post Type General Name'),
-		'singular_name'       => _x( 'Sea Find', 'Post Type Singular Name'),
-		'menu_name'           => __( 'Sea Find'),
-		'parent_item_colon'   => __( 'Parent Sea Find'),
-		'all_items'           => __( 'All Sea Find' ),
-		'view_item'           => __( 'View Sea Find'),
-		'add_new_item'        => __( 'Add New Sea Find'),
+		'name'                => _x( 'Search Image', Find', 'Post Type General Name'),
+		'singular_name'       => _x( 'Search Image', 'Post Type Singular Name'),
+		'menu_name'           => __( 'Search Image'),
+		'parent_item_colon'   => __( 'Parent Search Image'),
+		'all_items'           => __( 'All Search Image' ),
+		'view_item'           => __( 'View Search Image'),
+		'add_new_item'        => __( 'Add New Search Image'),
 		'add_new'             => __( 'Add New'),
-		'edit_item'           => __( 'Edit Sea Find'),
-		'update_item'         => __( 'Update Sea Find'),
-		'search_items'        => __( 'Search Sea Find'),
+		'edit_item'           => __( 'Edit Search Image'),
+		'update_item'         => __( 'Update Search Image'),
+		'search_items'        => __( 'Search Search Image'),
 		'not_found'           => __( 'Not Found'),
 		'not_found_in_trash'  => __( 'Not found in Trash'),
 	);
@@ -128,7 +128,7 @@ function isg_meta_box_fields(){
 }
 
 function isg_meta_box_add(){
-	add_meta_box( 'isg_meta_box', 'Sea Find Hints', 'isg_meta_box_fields', 'seafind', 'normal', 'high' );
+	add_meta_box( 'isg_meta_box', 'Search Image Hints', 'isg_meta_box_fields', 'seafind', 'normal', 'high' );
 }
 
 add_action( 'add_meta_boxes', 'isg_meta_box_add' );
